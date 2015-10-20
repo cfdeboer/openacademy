@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_partner_form" model="ir.ui.view">
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='sales_purchases']//field[@name='supplier']" position="after">
+                    <field name="is_course_participant" />
+                </xpath>
+                <xpath expr="//page[@name='sales_purchases']//field[@name='supplier']" position="attributes">
+                    <attribute name="string">Is a supplier</attribute>
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+                <xpath expr="//div[@name='buttons']" position="inside">
+                    <button name="button_show_subscriptions" class="oe_stat_button" icon="fa-heart" type="object" string="Open participants" />
+                </xpath>
+            </field>
+        </record>
+        <record id="view_partner_form2" model="ir.ui.view">
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="cursus.view_partner_form" />
+            <field name="arch" type="xml">
+                <field name="is_course_participant" position="before">
+                    <field name="my_secret_field" />
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>
