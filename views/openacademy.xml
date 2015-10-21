@@ -87,13 +87,13 @@
                     <field name="arch" type="xml">
                         <tree string="Session tree">
                                 <field name="name"/>
+                                <field name='course_id'/>
                                 <field name="start_date"/>
                                 <field name="duration"/>
                                 <field name="teacher_id"/>
                                 <field name="lunch"/>
                                 <field name="attendees_per_session"/>
                                 <field name="vegies_per_session"/>
-                                <field name='course_id'/>
                         </tree>
                     </field>
                 </record>
@@ -119,8 +119,6 @@
               <!--Attendee views -->
                 <record model="ir.actions.act_window" id="attendee_list_action">
                     <field name="name">Attendees</field>
-                    <field name="vegetarian"></field>
-                    <field name="total_vegetarians"></field>
                     <field name="res_model">openacademy.attendee</field>
                     <field name="view_type">form</field>
                     <field name="view_mode">tree,form</field>
@@ -137,12 +135,12 @@
                                 <field name="name"/>
                                 <field name="vegetarian"/>
                                 <field name="attendee_ids"/>
-                                <field name="total_vegetarians"></field>
+                                <field name="total_vegetarians"/>
                         </tree>
                     </field>
                 </record>
 
-               <!-- attendee form view -->
+                <!-- attendee form view -->
                <record model="ir.ui.view" id="attendee_form_view">
                     <field name="name">attendee.form</field>
                     <field name="model">openacademy.attendee</field>
@@ -153,6 +151,8 @@
                                 <field name="name"/>
                                 <field name="vegetarian"/>
                                 <field name="attendee_ids"/>
+                                <field name="sessions"/>
+                                <field name="total_vegetarians"/>
                            </group>
                            </sheet></form>
                     </field>
@@ -162,7 +162,7 @@
 
                 <menuitem id="attendee_menu" name="Attendees"
                   parent="configuration_menu"
-                  action="attendee_list_action"/>
+                  action="attendee_list_action"/>  
 
 
 
@@ -173,21 +173,24 @@
                     <field name="view_type">form</field>
                     <field name="view_mode">tree,form</field>
                 </record>
+   
+                <!-- teachers tree view--> 
+               <record model="ir.ui.view" id="teachers_tree_view">
+                    <field name="name">teachers.tree</field>
+                    <field name="model">openacademy.teachers</field>
+                    <field name="arch" type="xml">
+                        <tree string="Teachers tree">
+                                <field name="name"/>
+                                <field name="session_ids"/>
+                        </tree>
+                    </field>
+                </record>
+
 
                 <menuitem id ="teachers_menu" name="Teachers"
                     parent="configuration_menu"
-                    action="teacher_list_action"/>
+                    action="teacher_list_action"/>  
 
-
-
-
-
-
-
-
-
-
-                  
 
     </data>
 </openerp>

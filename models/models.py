@@ -59,33 +59,22 @@ class Session(models.Model):
      attendee_ids=fields.Many2many('openacademy.attendee', string= 'Session Attendee id')
      teacher_id = fields.Many2one('openacademy.teachers', string="Teacher")
      vegies_per_session = fields.Char(string="vegetarians in session",
-          compute='veggies' )
-     attendees_per_session= fields.Char(string= "Attendees per session",
-          compute= 'num_attendees')
-
+          compute='veggies' ) 
+  
 
      # total_vegies= fields.Char('openacademy.attendee.total_vegetarians', 
      
      def veggies(self):
          for session in self:
-             print "Session Attendees:", session.attendee_ids
+             print "Session Attendees:", session.attendee_id.attendee_idss
              vegies_count_per_session=0
-             for attendee in session.attendee_ids :
-                print "Attendee:",attendee, "Attendees:", session.attendee_ids
+             attendees = self.env['openacademy.attendee']
+             for attendee in attendees:
+                print "Attendee:",attendee, "Attendees:",attendees 
                 if attendee.vegetarian:
                     vegies_count_per_session += 1
              session.vegies_per_session = vegies_count_per_session
-    
-     def all_attendees(self):
-         return self.env['openacademy.attendees'].search_count([])
 
-     #--number of attendees er session
-     def num_attendees(self):
-         for session in self:
-             count_session_attendees=0
-             for attendee in session.attendee_ids:
-                 count_session_attendees += 1
-             session.attendees_per_session=count_session_attendees
 
 
 
@@ -104,8 +93,8 @@ class Attendee(models.Model):
             if (attendees.vegetarian==True):
                 count += 1
         # with "total_vegetarians" we fill xml field name  "total vegetarians"        
-        for a in self:
-            a.total_vegetarians= count
+        for attendees in self:
+            attendees.total_vegetarians= count
 
 
 
