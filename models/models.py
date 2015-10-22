@@ -6,6 +6,8 @@ class Teachers(models.Model):
      _name= "openacademy.teachers"
      _inherit = 'res.partner'
      name = fields.Char(string='Teachers')
+     session_ids=fields.One2many('openacademy.session', 
+             'teacher_id', string='Sessions to teach' )
 
 
 class Course(models.Model):
@@ -13,16 +15,15 @@ class Course(models.Model):
      name = fields.Char(string= "Title", required=True)
      description = fields.Text(string="description")
      session_ids=fields.One2many('openacademy.session', 'course_id',
-              string="Sessions no.") #, compute='show_session_id')
+              string="Sessions no.") 
      attendee_ids=fields.Many2many('openacademy.attendee', 
              string='Course Attendees')
      total_course_sessions=fields.Char(string='total sessions in course',
               compute='calculate_total_sess' )
      average_sess = fields.Char(string= 'average sessions',
               compute='sess_div_courses')
-  
-
-     #----called in attr: total_course_sessions
+     
+     
      def calculate_total_sess(self):
          for course in self:
              course.total_course_sessions= len(course.session_ids)
@@ -35,47 +36,38 @@ class Course(models.Model):
          for course in self:
              course.average_sess= course_average
 
-     def veggies(self):
-         pass
-         #for course in self:
-             # ''' veggies_per_course=0
-             # attendees = self.env['openacademy.attendee']
-             # for attendee in attendees:
-             #    if attendee.vegetarian:
-             #        veggie_count_per_course += 1'''
-          #   course.veggies_per_course = 555  #veggie_count_per_course
-
-
-
-
 class Session(models.Model):
      _name = 'openacademy.session'
      name = fields.Char(string="Session title or no.")
-     description = fields.Text()
+     description = fields.Text(string='Session name', required=True)
      duration= fields.Text()
      start_date = fields.Text()
      lunch= fields.Boolean("Vegetarian food available", default=False)
      course_id= fields.Many2one('openacademy.course', string='Course')
-     attendee_ids=fields.Many2many('openacademy.attendee', string= 'Session Attendee id')
+     attendee_ids=fields.Many2many('openacademy.attendee', 
+             string= 'Session Attendee id')
      teacher_id = fields.Many2one('openacademy.teachers', string="Teacher")
      vegies_per_session = fields.Char(string="vegetarians in session",
           compute='veggies' ) 
-  
+     attendees_per_session= fields.Char(string= "Attendees per session",
+                    compute='num_attendees')
 
-     # total_vegies= fields.Char('openacademy.attendee.total_vegetarians', 
      
      def veggies(self):
          for session in self:
-             print "Session Attendees:", session.attendee_id.attendee_idss
              vegies_count_per_session=0
-             attendees = self.env['openacademy.attendee']
-             for attendee in attendees:
-                print "Attendee:",attendee, "Attendees:",attendees 
+             for attendee in session.attendee_ids:
                 if attendee.vegetarian:
                     vegies_count_per_session += 1
              session.vegies_per_session = vegies_count_per_session
 
-
+     #--number of attendees er session
+     def num_attendees(self):
+         for session in self:
+             count_session_attendees=0
+             for attendee in session.attendee_ids:
+                 count_session_attendees += 1
+             session.attendees_per_session=count_session_attendees
 
 
 class Attendee(models.Model):
@@ -85,16 +77,16 @@ class Attendee(models.Model):
     attendee_ids=fields.Many2many('res.partner', string= 'Attendee id')
     total_vegetarians= fields.Char(string ="total vegetarians", \
             compute = "count_vegetarians")
-
+    sessions= fields.Many2many('openacademy.session','attendee_ids', 
+            string='Participates in session:')
 
     def count_vegetarians(self):
         count = 0
         for attendees in self:
             if (attendees.vegetarian==True):
                 count += 1
-        # with "total_vegetarians" we fill xml field name  "total vegetarians"        
-        for attendees in self:
-            attendees.total_vegetarians= count
+        for a in self:
+            a.total_vegetarians= count
 
 
 
