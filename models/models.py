@@ -12,17 +12,19 @@ class Teachers(models.Model):
 
 class Course(models.Model):
      _name = 'openacademy.course'
+     _order = 'session_ids'
      name = fields.Char(string= "Title", required=True)
      description = fields.Text(string="description")
      session_ids=fields.One2many('openacademy.session', 'course_id',
               string="Sessions no.") 
      attendee_ids=fields.Many2many('openacademy.attendee', 
-             string='Course Attendees')
+             string='Course Attendees' )
      total_course_sessions=fields.Char(string='total sessions in course',
               compute='calculate_total_sess' )
      average_sess = fields.Char(string= 'average sessions',
               compute='sess_div_courses')
-     
+     teacher_names= fields.Char(string="Course Teachers", compute='list_the_teachers' )
+ 
      
      def calculate_total_sess(self):
          for course in self:
@@ -35,6 +37,15 @@ class Course(models.Model):
          course_average = 1.0*all_sessions/all_courses
          for course in self:
              course.average_sess= course_average
+
+     def list_the_teachers(self):
+         for session in self.session_ids:
+             course_teachers_list=[]
+             for teacher_id in session:
+                 print session.teacher_id
+                 course_teachers_list.append(teacher_id)
+             session.teacher_names=course_teachers_list
+
 
 class Session(models.Model):
      _name = 'openacademy.session'

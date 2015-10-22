@@ -33,10 +33,12 @@
                     <field name="name">course.tree</field>
                     <field name="model">openacademy.course</field>
                     <field name="arch" type="xml">
-                        <tree string="Course Tree">
+                        <tree string="Course Tree" default_order='session_ids'>
                             <field name="name"/>
                             <field name="description"/>
                             <field name="session_ids"/>
+                            <field name="teacher_names"/>
+                            <field name="attendee_ids"/>
                             <field name="average_sess"/>
                             <field name="total_course_sessions"/>
                         </tree>
@@ -54,6 +56,7 @@
                             <field name="description"/>
                             <field name="session_ids"/>
                             <field name="average_sess"/>
+                            <field name="teacher_names"/>
                             <field name="attendee_ids"/>
                          </group></sheet>
                         </form>
