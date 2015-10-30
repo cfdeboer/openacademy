@@ -59,12 +59,13 @@
                             <field name="session_ids"/>
                             <field name="average_sess"/>
                             <field name="teacher_names"/>
+                            <field name="attendee_list"/>
                             <!--
                             Not good to show next field,
                             but you cannot add an attendee 
-                            because of @api.constrains('attendee_ids')  
-                            -->
-                            <field name="attendee_ids"/>
+                            because of excercise with @api.constrains('attendee_ids')  
+                            --> 
+                            <field name="attendee_ids"/> 
                          </group></sheet>
                         </form>
                     </field>

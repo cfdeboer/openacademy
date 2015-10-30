@@ -38,8 +38,10 @@ class Course(models.Model):
              string="Sessions no.") 
      sessions_list=fields.Char(string='session list',
              compute='list_the_sessions')
-     attendee_ids=fields.Many2many('openacademy.attendee', 
+     attendee_ids=fields.Many2many('openacademy.attendee','name', 
              string='Course Attendees' )
+     attendee_list=fields.Char(string='Course Attendee list: ', 
+             compute='list_the_attendees')
      total_course_sessions=fields.Char(string='total sessions in course',
              compute='calculate_total_sess' )
      average_sess = fields.Char(string= 'average sessions',
@@ -92,7 +94,18 @@ class Course(models.Model):
              course_session_string = str( ', '.join(course_session_list))
                  # print course_session_string
              course.sessions_list = course_session_string
-
+       
+     def list_the_attendees(courses):
+         for course in courses:
+             course_attendee_list=[]
+             for session_id in course.session_ids:
+                 for attendee in session_id.attendee_ids:
+                     attendee_name= attendee.name
+                     if attendee_name:
+                        print attendee_name
+                        course_attendee_list.append(attendee_name)
+             course_attendee_string=str(', '.join(course_attendee_list))
+             course.attendee_list=course_attendee_string
 
 
 class Session(models.Model):
