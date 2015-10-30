@@ -9,7 +9,7 @@ class Teachers(models.Model):
      session_ids=fields.One2many('openacademy.session', 
              'teacher_id', string='Sessions to teach' )
      session_amount = fields.Integer(string="Number of sessions",compute="number_of_sessions")
-     age = fields.Integer("Age", required=True)
+     age = fields.Integer("Age", required=False)
 
      @api.constrains('age')
      # @api.one
@@ -98,7 +98,7 @@ class Course(models.Model):
 class Session(models.Model):
      _name = 'openacademy.session'
      name = fields.Char(string="Session title or no.")
-     description = fields.Text(string='Session name', required=True)
+     description = fields.Text(string='Session name', required=False)
      duration= fields.Text(required=True)
      start_date = fields.Text()
      lunch= fields.Boolean("Vegetarian food available", default=False)

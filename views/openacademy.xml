@@ -122,9 +122,11 @@
                 <menuitem id="session_menu" name="Sessions"
                   parent="openacademy_menu"
                   action="session_list_action"/>
-              
-              
-              
+
+              <menuitem id="configuration_menu" name="Configuration" 
+                  parent="main_openacademy_menu"/>
+
+
               <!--Attendee views -->
                 <record model="ir.actions.act_window" id="attendee_list_action">
                     <field name="name">Attendees</field>
