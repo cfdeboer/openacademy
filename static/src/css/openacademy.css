@@ -1,9 +1,8 @@
 @charset "utf-8";
 /* ---- Default Styles ---- */
 
-
-.oe_list_field_cell oe_list_field_integer oe_number   oe_required [data-field="age"] {
-    width: 20px;
+.o_openacademy smalleKolom [data-field="age"] {
+    width: 10px;
     text-align: center;
 
 }

@@ -21,7 +21,6 @@
 
     # any module necessary for this one to work correctly
     'depends': ['base'],
-
     # always loaded
     'data': [
         'security/security.xml',
@@ -30,6 +29,9 @@
         'views/openacademy.xml',
         'views/partner.xml',
     ],
+    
+    'css': ['static/src/css/openacademy.css'],
+    # always loaded
     # only loaded in demonstration mode
     'demo': [
         'demo.xml',
