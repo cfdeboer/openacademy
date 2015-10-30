@@ -77,7 +77,7 @@ class Course(models.Model):
              for session_id in course.session_ids:
                  for teacher_id in session_id:
                      teacher_name = session_id.teacher_id.name
-                     if teacher_name:
+                     if teacher_name and teacher_name not in course_teachers_list:
                         # print "Session: ",session_id.name ,", teacher name: ", teacher_name
                         course_teachers_list.append(teacher_name)
              course_teachers_string=str( ', '.join(course_teachers_list))
@@ -101,7 +101,7 @@ class Course(models.Model):
              for session_id in course.session_ids:
                  for attendee in session_id.attendee_ids:
                      attendee_name= attendee.name
-                     if attendee_name:
+                     if attendee_name and attendee_name not in course_attendee_list:
                         print attendee_name
                         course_attendee_list.append(attendee_name)
              course_attendee_string=str(', '.join(course_attendee_list))
