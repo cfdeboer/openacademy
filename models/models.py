@@ -4,7 +4,9 @@ from openerp import models, fields, api, exceptions
 
 class Teachers(models.Model):
      _name= "openacademy.teachers"
-     _inherit = 'res.partner'
+     partner_id=fields.Many2one('res.partner', string='Teacher id', required=False)
+# next statment inhibits Administrator from making new contacts
+#     _inherit = 'res.partner'
      name = fields.Char(string='Teachers')
      session_ids=fields.One2many('openacademy.session', 
              'teacher_id', string='Sessions to teach' )
@@ -144,7 +146,10 @@ class Session(models.Model):
 
 class Attendee(models.Model):
     _name='openacademy.attendee'
-    _inherit='res.partner'
+    #partner_id=fields.Many2one('res.partner', string='Attendee id', required=False)
+     # next statment inhibits Administrator from making new contacts
+     #     _inherit = 'res.partner'
+    name = fields.Char(string='Attendee')
     vegetarian = fields.Boolean(string="vegetarian", default=False) 
     attendee_ids=fields.Many2many('res.partner', 
             string= 'Attendee id')
