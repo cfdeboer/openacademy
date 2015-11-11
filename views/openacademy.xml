@@ -163,6 +163,7 @@
                                 <field name="name"/>
                                 <field name="vegetarian"/>
                                 <field name="attendee_ids"/>
+                                <!-- <field name= "partner_id"/>-->
                                 <field name="sessions"/>
                                 <field name="total_vegetarians"/>
                            </group>
@@ -206,8 +207,9 @@
                     <field name="arch" type="xml">
                          <form string="Teachers Form View">
                            <sheet>
-                           <group>
+                               <group>
                                 <field name="name"/>
+                                <field name='partner_id'/>
                                 <field name="age" class='smalleKolom'/>
                                 <field name="session_ids"/>
                            </group>
