@@ -23,12 +23,14 @@
     'depends': ['base'],
     # always loaded
     'data': [
-        'security/security.xml',
         'security/ir.model.access.csv',
+        'security/security.xml',
         'templates.xml',
         'views/openacademy.xml',
         'views/partner.xml',
-    ],
+        'session-reports.xml',
+        'course-reports.xml',
+        ],
     
     'css': ['static/src/css/openacademy.css'],
     # always loaded

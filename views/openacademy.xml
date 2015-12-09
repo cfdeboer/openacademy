@@ -10,7 +10,7 @@
                        <field name="name">OpenCourses</field>
                        <field name="res_model">openacademy.course</field>
                        <field name="view_type">form</field>
-                       <field name="view_mode">tree,form,kanban</field>
+                       <field name="view_mode">tree,form</field>
                        <field name="help" type="html">
                            <p class="oe_view_nocontent_create">Create the first course</p></field>
                    </record>
@@ -65,7 +65,7 @@
                             but you cannot add an attendee 
                             because of excercise with @api.constrains('attendee_ids')  
                             --> 
-                            <field name="attendee_ids"/> 
+                            <!--<field name="attendee_ids"/> -->
                          </group></sheet>
                         </form>
                     </field>
@@ -96,13 +96,14 @@
                     <field name="name">session.tree</field>
                     <field name="model">openacademy.session</field>
                     <field name="arch" type="xml">
-                        <tree string="Session tree">
+                    <tree string="Session Tree" colors="#0000ff:duration&lt;5;red:duration&gt;15">
                                 <field name="name"/>
                                 <field name='course_id'/>
                                 <field name="start_date"/>
-                                <field name="duration"/>
+                                <field name="duration" invisible='1'/>
                                 <field name="teacher_id"/>
                                 <field name="lunch"/>
+                                <field name="attendee_list"/>
                                 <field name="attendees_per_session"/>
                                 <field name="vegies_per_session"/>
                         </tree>
@@ -110,14 +111,59 @@
                 </record>
 
 
-             
+                <record model="ir.ui.view" id="view_openacad_session_kanban">
+                    <field name="name">openacademy.session.kanban</field>
+                    <field name="model">openacademy.session</field>
+                    <field name="arch" type="xml">
+                        <kanban default_group_by="teacher_id">
+                            <field name="color"/>
+                            <templates>
+                                <t t-name="kanban-box">
+                                    <div
+                                        t-attf-class="oe_kanban_color_{{kanban_getcolor(record.color.raw_value)}}
+                                        oe_kanban_global_click_edit oe_semantic_html_override
+                                        oe_kanban_card {{record.group_fancy==1 ? 'oe_kanban_card_fancy' : ''}}">
+                                        <div class="oe_dropdown_kanban">
+                                            <!-- dropdown menu -->
+                                            <div class="oe_dropdown_toggle">
+                                                <span class="oe_e">#</span>
+                                                <ul class="oe_dropdown_menu">
+                                                    <li>
+                                                        <a type="delete">Delete</a>
+                                                    </li>
+                                                    <li>
+                                                        <ul class="oe_kanban_colorpicker"
+                                                            data-field="color"/>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="oe_clear"></div>
+                                        </div>
+                                        <div t-attf-class="oe_kanban_content">
+                                            <!-- title -->
+                                            Session name:
+                                            <field name="name"/>
+                                            <br/>
+                                            Start date:
+                                            <field name="start_date"/>
+                                            <br/>
+                                            duration:
+                                            <field name="duration"/>
+                                        </div>
+                                    </div>
+                                </t>
+                            </templates>
+                        </kanban>
+                    </field>
+                </record>
 
                 <record model="ir.actions.act_window" id="session_list_action">
                     <field name="name">Sessions</field>
                     <field name="res_model">openacademy.session</field>
                     <field name="view_type">form</field>
-                    <field name="view_mode">tree,form</field>
+                    <field name="view_mode">tree,form,kanban</field>
                 </record>
+
 
 
                 <menuitem id="session_menu" name="Sessions"
@@ -222,6 +268,73 @@
                 <menuitem id ="teachers_menu" name="Teachers"
                     parent="configuration_menu"
                     action="teacher_list_action"/>  
+
+               <!--Wizard One: adding attendees to session  --> 
+                <record model="ir.ui.view" id="wizard_form_view1">
+                    <field name="name">wizard.form</field>
+                    <field name="model">openacademy.wizard</field>
+                    <field name="arch" type="xml">
+                        <form string="Add Attendees">
+                            <group>
+                                <field name="session_ids"/>
+                                <field name="attendee_ids"/>
+                            </group>
+                            <footer>
+                                <button name="subscribe" type="object"
+                                    string="Subscribe" class="oe_highlight"/>
+                                or
+                                <button special="cancel" string="Cancel"/>
+                            </footer>
+
+                        </form>
+                    </field>
+                </record>
+
+                <act_window id="launch_session_wizard"
+                    name="Add Attendees"
+                    src_model="openacademy.session"
+                    res_model="openacademy.wizard"
+                    view_mode="form"
+                    target="new"
+                    key2="client_action_multi"/>
+
+
+               <!--Wizard Two: adding sessions to courses  - -> 
+               
+               <record model="ir.ui.view" id="wizard_form_view2">
+                    <field name="name">wizard.form</field>
+                    <field name="model">openacademy.wizard</field>
+                    <field name="arch" type="xml">
+                        <form string="Add Sessions">
+                            <group>
+                                <field name="course_ids"/>
+                                <field name="session_ids"/>
+                            </group>
+                            <footer>
+                                <button name="add_sessions" type="object"
+                                    string="Add Session" class="oe_highlight"/>
+                                or
+                                <button special="cancel" string="Cancel"/>
+                            </footer>
+
+                        </form>
+                    </field>
+                </record>
+
+                <act_window id="launch_course_wizard"
+                    name="Add Sessions"
+                    src_model="openacademy.course"
+                    res_model="openacademy.wizard"
+                    view_mode="form"
+                    target="new"
+                    key2="client_action_multi"/>
+
+
+                --> 
+                
+
+
+
 
 
     </data>

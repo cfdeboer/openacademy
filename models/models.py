@@ -51,6 +51,28 @@ class Course(models.Model):
      teacher_names= fields.Char(string="Course Teachers", 
              compute='list_the_teachers' )
 
+#     @api.multi
+#     def copy(self, default=None):
+#         default = dict(default or {})
+#         copied_count = self.search_count(
+#                 [('name', '=like', u"Copy of {}%".format(self.name))])
+#         if not copied_count:
+#             new_name = u"Copy of {}".format(self.name)
+#         else:
+#             new_name = u"Copy of {} ({})".format(self.name, copied_count)
+#         default['name'] = new_name
+#         return super(Course, self).copy(default)
+
+     
+#     _sql_constraints = [ ('name_description_check',
+#                           'CHECK(name != description)',
+#                           "The title of the course should not be the description"),
+##
+#                          ('name_unique',
+#                           'UNIQUE(name)',
+#                           "The course title must be unique"),
+#                            ]
+#
 
      @api.constrains('attendee_ids')
      def constrain_attendee(self):
@@ -103,8 +125,8 @@ class Course(models.Model):
              for session_id in course.session_ids:
                  for attendee in session_id.attendee_ids:
                      attendee_name= attendee.name
-                     if attendee_name and attendee_name not in course_attendee_list:
-                        print attendee_name
+                     if attendee_name not in course_attendee_list:
+                        #print "In course: "+ attendee_name
                         course_attendee_list.append(attendee_name)
              course_attendee_string=str(', '.join(course_attendee_list))
              course.attendee_list=course_attendee_string
@@ -114,18 +136,20 @@ class Session(models.Model):
      _name = 'openacademy.session'
      name = fields.Char(string="Session title or no.")
      description = fields.Text(string='Session name', required=False)
-     duration= fields.Text(required=True)
-     start_date = fields.Text()
+     duration = fields.Float(digits=(6, 2), help="Duration in days")
+     start_date = fields.Date(default=fields.Date.today)
      lunch= fields.Boolean("Vegetarian food available", default=False)
-     course_id= fields.Many2one('openacademy.course', string='Course')
-     attendee_ids=fields.Many2many('openacademy.attendee', 
+     course_id= fields.Many2one('openacademy.course',  string='Course')
+     attendee_ids=fields.Many2many('openacademy.attendee','attendee_ids', 
              string= 'Session Attendee id')
      teacher_id = fields.Many2one('openacademy.teachers', string="Teacher")
      vegies_per_session = fields.Char(string="vegetarians in session",
           compute='veggies' ) 
      attendees_per_session= fields.Char(string= "Attendees per session",
                     compute='num_attendees')
-
+     attendee_list=fields.Char(string='Session attendee list: ', 
+             compute='list_the_attendees')
+     color = fields.Integer()
      
      def veggies(self):
          for session in self:
@@ -142,6 +166,17 @@ class Session(models.Model):
              for attendee in session.attendee_ids:
                  count_session_attendees += 1
              session.attendees_per_session=count_session_attendees
+
+     def list_the_attendees(sessions):
+         for session in sessions:
+             session_attendee_list=[]
+             for attendee in session.attendee_ids:
+                     attendee_name= attendee.name
+                     if attendee_name and attendee_name not in session_attendee_list:
+                        #print "in session: "+attendee_name
+                        session_attendee_list.append(attendee_name)
+             session_attendee_string=str(', '.join(session_attendee_list))
+             session.attendee_list=session_attendee_string
 
 
 class Attendee(models.Model):
