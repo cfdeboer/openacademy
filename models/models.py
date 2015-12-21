@@ -92,6 +92,7 @@ class Course(models.Model):
          all_courses = self.env['openacademy.course'].search_count([])
          all_sessions = self.env['openacademy.session'].search_count([])
          course_average = 1.0*all_sessions/all_courses
+         #print "all courses: ", all_courses, "  all sessions: ", all_sessions
          for course in self:
              course.average_sess= course_average
 
